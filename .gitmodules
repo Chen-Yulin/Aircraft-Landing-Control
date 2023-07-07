@@ -1,0 +1,6 @@
+[submodule "Assets/ThirdParty/GLTFUtility"]
+	path = Assets/ThirdParty/GLTFUtility
+	url = https://github.com/Siccity/GLTFUtility.git
+[submodule "Assets/ThirdParty/NewtonsoftJson"]
+	path = Assets/ThirdParty/NewtonsoftJson
+	url = https://github.com/jilleJr/Newtonsoft.Json-for-Unity
