@@ -9,11 +9,11 @@ public class Dynamic_MainLift: MonoBehaviour
     public float WingArea = 50;
     public float AirDensity = 1f;
 
-    private Vector3 lift_direction;
-    private Vector3 drag_direction;
+    protected Vector3 lift_direction;
+    protected Vector3 drag_direction;
 
-    private Transform Aircraft;
-    private Rigidbody rb;
+    protected Transform Aircraft;
+    protected Rigidbody rb;
 
     public void UpdatePara()
     {
@@ -27,7 +27,7 @@ public class Dynamic_MainLift: MonoBehaviour
         drag_direction = -rb.velocity.normalized;
     }
 
-    public float CalculateLift()
+    public virtual float CalculateLift()
     {
         float CL = CalculateCL();
         float Lift = 0.5f * AirDensity * rb.velocity.sqrMagnitude * WingArea * CL;
@@ -40,22 +40,10 @@ public class Dynamic_MainLift: MonoBehaviour
         return Drag;
     }
 
-    public float CalculateCL()
+    public float CalculateCL(int WingConst = 5)
     {
-        float CL;
-        if (AoA < 11.23f && AoA>-18f)
-        {
-            CL = 0.1f * AoA + 0.5f;
-        }
-        else if (AoA > 11.23f && AoA < 21.23f)
-        {
-            CL = -0.01f * Mathf.Pow((AoA - 14), 2) + 1.7f;
-        }
-        else
-        {
-            CL = 25f / AoA;
-        }
-        return CL;
+        return (-0.7f * Mathf.Atan(0.1f * Mathf.Abs(AoA)-2)+1)
+                * 6f * Mathf.Sin(0.01f * (AoA + WingConst));
     }
     public float CalculateCD()
     {
@@ -79,7 +67,7 @@ public class Dynamic_MainLift: MonoBehaviour
     void FixedUpdate()
     {
         UpdatePara();
-        rb.AddForce(CalculateLift() * lift_direction + CalculateDrag() * drag_direction, ForceMode.Force);
+        rb.AddForceAtPosition(CalculateLift() * lift_direction + CalculateDrag() * drag_direction, transform.position, ForceMode.Force);
     }
 
     private void OnDrawGizmos()
