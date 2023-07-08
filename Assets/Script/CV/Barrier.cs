@@ -50,6 +50,11 @@ public class Barrier : MonoBehaviour
     {
         if (TargetHook)
         {
+            float coeff = Mathf.Pow(TargetRigid.velocity.magnitude, 1.5f) * 20;
+            TargetRigid.AddForceAtPosition((transform.position + transform.right * 17 + transform.forward * HookPosition - TargetHook.transform.position) * coeff,
+                                            TargetHook.transform.position);
+            TargetRigid.AddForceAtPosition((transform.position - transform.right * 17 + transform.forward * HookPosition - TargetHook.transform.position) * coeff,
+                                            TargetHook.transform.position);
             if (TargetRigid.velocity.z < 15f)
             {
                 TargetHook = null;
@@ -57,12 +62,6 @@ public class Barrier : MonoBehaviour
                 LRs[0].enabled = false;
                 LRs[1].enabled = false;
             }
-
-            float coeff = Mathf.Pow(TargetRigid.velocity.magnitude, 1.5f) * 20;
-            TargetRigid.AddForceAtPosition((transform.position + transform.right * 17 + transform.forward * HookPosition - TargetHook.transform.position) * coeff,
-                                            TargetHook.transform.position);
-            TargetRigid.AddForceAtPosition((transform.position - transform.right * 17 + transform.forward * HookPosition - TargetHook.transform.position) * coeff,
-                                            TargetHook.transform.position);
         }
         
     }
