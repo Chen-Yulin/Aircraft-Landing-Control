@@ -52,11 +52,11 @@ public class Aircraft_Controller : MonoBehaviour
 
             if (Input.GetKey(KeyCode.D))
             {
-                RowAngle -= Time.deltaTime * 5;
+                RowAngle -= Time.deltaTime * 10;
             }
             else if (Input.GetKey(KeyCode.A))
             {
-                RowAngle += Time.deltaTime * 5;
+                RowAngle += Time.deltaTime * 10;
             }
             else
             {
