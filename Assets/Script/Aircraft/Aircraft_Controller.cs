@@ -11,11 +11,110 @@ public class Aircraft_Controller : MonoBehaviour
     public float InitialSpeed = 100;
     private Rigidbody rb;
 
-    public float PitchAngle = 0;// push down positive
-    public float RowAngle = 0;// anti-clockwise positive
+    private float pitchAngle = 0;
+    public float PitchAngle
+    {
+        get { return pitchAngle; } 
+        set { pitchAngle = value; pitchAngle = Mathf.Clamp(value, -15, 15); }
+    }// push down positive
+    private float rowAngle = 0;
+    public float RowAngle
+    {
+        get { return rowAngle; }
+        set { rowAngle = value; rowAngle = Mathf.Clamp(value, -5, 5); }
+    }// anti-clockwise positive
+    private float yawAngle = 0;
+    public float YawAngle
+    {
+        get { return yawAngle; }
+        set { yawAngle = value; yawAngle = Mathf.Clamp(value, -5, 5); }
+    }// head left positive
 
     public bool keyboard = true;
 
+
+    //state
+    public float AirSpeed
+    {
+        get
+        {
+            return rb.velocity.magnitude;  
+        }
+    }
+    public float AoA
+    {
+        get {
+            Vector3 velocity_yz = Vector3.ProjectOnPlane(rb.velocity, transform.right);
+            float AoA = Vector3.Angle(velocity_yz, transform.forward);
+            if (Vector3.Dot(velocity_yz, transform.up) > 0)
+            {
+                AoA = -AoA;
+            }
+
+            return AoA; }
+    }
+    public float Row // anti-clock wise positive
+    {
+        get
+        {
+            if (transform.eulerAngles.z > 180)
+            {
+                return transform.eulerAngles.z - 360;
+            }
+            else
+            {
+                return transform.eulerAngles.z;
+            }
+        }
+    }
+    public float RowSpeed
+    {
+        
+        get { return rb.angularVelocity.z; }
+    }
+    public float Pitch // head up positive
+    {
+        get
+        {
+            if (transform.eulerAngles.x > 180)
+            {
+                return -transform.eulerAngles.x + 360;
+            }
+            else
+            {
+                return -transform.eulerAngles.x;
+            }
+        }
+    }
+    public float PitchSpeed
+    {
+        get { return -rb.angularVelocity.x; }
+    }
+    public float Yaw // head left positive
+    {
+        get
+        {
+            if (transform.eulerAngles.y > 180)
+            {
+                return transform.eulerAngles.y - 360;
+            }
+            else
+            {
+                return transform.eulerAngles.y;
+            }
+        }
+    }
+    public float YawSpeed
+    {
+        get { return rb.angularVelocity.y; }
+    }
+
+
+
+    public void UpdatePara()
+    {
+        
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -88,6 +187,8 @@ public class Aircraft_Controller : MonoBehaviour
         {
             Gizmos.color = Color.yellow;
             Gizmos.DrawLine(transform.position, transform.position + rb.velocity.normalized * 5000f);
+            Gizmos.color = Color.blue;
+            Gizmos.DrawLine(transform.position, transform.position + transform.forward * 5000f);
         }
 
     }
