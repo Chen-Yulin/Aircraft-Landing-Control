@@ -9,7 +9,8 @@ public class Aircraft_Controller : MonoBehaviour
     public GameObject Left_V_Tail;
     public GameObject Right_V_Tail;
     public float InitialSpeed = 100;
-    private Rigidbody rb;
+
+    public Rigidbody rb;
 
     private float pitchAngle = 0;
     public float PitchAngle
@@ -27,8 +28,14 @@ public class Aircraft_Controller : MonoBehaviour
     public float YawAngle
     {
         get { return yawAngle; }
-        set { yawAngle = value; yawAngle = Mathf.Clamp(value, -5, 5); }
+        set { yawAngle = value; yawAngle = Mathf.Clamp(value, -20, 20); }
     }// head left positive
+    private float thrust = 0f;
+    public float Thrust
+    {
+        get { return thrust; }
+        set { thrust = value; thrust = Mathf.Clamp(value, 0, 1); }
+    }
 
     public bool keyboard = true;
 
@@ -44,12 +51,21 @@ public class Aircraft_Controller : MonoBehaviour
     public float AoA
     {
         get {
-            Vector3 velocity_yz = Vector3.ProjectOnPlane(rb.velocity, transform.right);
-            float AoA = Vector3.Angle(velocity_yz, transform.forward);
-            if (Vector3.Dot(velocity_yz, transform.up) > 0)
+            float AoA;
+            if (rb.velocity != Vector3.zero)
             {
-                AoA = -AoA;
+                Vector3 velocity_yz = Vector3.ProjectOnPlane(rb.velocity, transform.right);
+                AoA = Vector3.Angle(velocity_yz, transform.forward);
+                if (Vector3.Dot(velocity_yz, transform.up) > 0)
+                {
+                    AoA = -AoA;
+                }
             }
+            else
+            {
+                AoA = 0;
+            }
+            
 
             return AoA; }
     }
@@ -122,6 +138,7 @@ public class Aircraft_Controller : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.centerOfMass = transform.Find("MassCenter").localPosition;
         rb.velocity = InitialSpeed*(transform.forward + 0f* transform.right);
+        Thrust = 0;
     }
 
     // Update is called once per frame
@@ -171,14 +188,18 @@ public class Aircraft_Controller : MonoBehaviour
             RowAngle = Mathf.Clamp(RowAngle, -5, 5);
         }
 
-        Left_H_Tail.transform.localRotation = Quaternion.Euler(PitchAngle + RowAngle,0,0);
-        Right_H_Tail.transform.localRotation = Quaternion.Euler(PitchAngle - RowAngle, 0, 0);
+
 
     }
 
     private void FixedUpdate()
     {
         rb.angularDrag = 0.0001f * rb.velocity.sqrMagnitude;
+        Left_H_Tail.transform.localRotation = Quaternion.Euler(PitchAngle + RowAngle, 0, 0);
+        Right_H_Tail.transform.localRotation = Quaternion.Euler(PitchAngle - RowAngle, 0, 0);
+        Left_V_Tail.transform.localRotation = Quaternion.Euler(0, YawAngle, 90);
+        Right_V_Tail.transform.localRotation = Quaternion.Euler(0, YawAngle, 90);
+        rb.AddForce(transform.forward * Thrust * 700000f);
     }
 
     private void OnDrawGizmos()
