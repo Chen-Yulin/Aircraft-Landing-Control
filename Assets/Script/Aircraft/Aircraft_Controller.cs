@@ -10,6 +10,9 @@ public class Aircraft_Controller : MonoBehaviour
     public GameObject Right_V_Tail;
     public float InitialSpeed = 100;
 
+    public ParticleSystem AB1;
+    public ParticleSystem AB2;
+
     public Rigidbody rb;
 
     private float pitchAngle = 0;
@@ -139,6 +142,8 @@ public class Aircraft_Controller : MonoBehaviour
         rb.centerOfMass = transform.Find("MassCenter").localPosition;
         rb.velocity = InitialSpeed*(transform.forward + 0f* transform.right);
         Thrust = 0;
+        AB1 = transform.Find("Afterburner 1").GetComponent<ParticleSystem>();
+        AB2 = transform.Find("Afterburner 2").GetComponent<ParticleSystem>();
     }
 
     // Update is called once per frame
@@ -200,6 +205,8 @@ public class Aircraft_Controller : MonoBehaviour
         Left_V_Tail.transform.localRotation = Quaternion.Euler(0, YawAngle, 90);
         Right_V_Tail.transform.localRotation = Quaternion.Euler(0, YawAngle, 90);
         rb.AddForce(transform.forward * Thrust * 700000f);
+        AB1.startLifetime = 0.03f + Thrust * 0.2f;
+        AB2.startLifetime = 0.03f + Thrust * 0.2f;
     }
 
     private void OnDrawGizmos()
