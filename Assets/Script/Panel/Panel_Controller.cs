@@ -35,8 +35,8 @@ public class Panel_Controller : MonoBehaviour
     {
         AirSpeedText.text = AC.AirSpeed.ToString("F2");
         AoAText.text = AC.AoA.ToString("F2");
-        RowText.text = AC.Row.ToString("F2");
-        RowVelText.text = AC.RowSpeed.ToString("F2");
+        RowText.text = AC.Roll.ToString("F2");
+        RowVelText.text = AC.RollSpeed.ToString("F2");
         PitchText.text = AC.Pitch.ToString("F2");
         PitchVelText.text = AC.PitchSpeed.ToString("F2");
         YawText.text = AC.Yaw.ToString("F2");

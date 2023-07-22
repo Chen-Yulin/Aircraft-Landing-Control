@@ -23,7 +23,7 @@ public class Policy_Controller : MonoBehaviour
     public void Calibrate_Stablizer()
     {
         aircraft.PitchAngle = aircraft.AoA;
-        aircraft.RowAngle = 0;
+        aircraft.RollAngle = 0;
         aircraft.YawAngle = 0;
     }
 
@@ -34,7 +34,7 @@ public class Policy_Controller : MonoBehaviour
     }
     public void KeepRow(float r)
     {
-        aircraft.RowAngle = 5 * (r - aircraft.Row) / Mathf.Exp(10 * aircraft.RowSpeed * Mathf.Sign(r - aircraft.Row));
+        aircraft.RollAngle = 5 * (r - aircraft.Roll) / Mathf.Exp(10 * aircraft.RollSpeed * Mathf.Sign(r - aircraft.Roll));
     }
     public void KeepYaw(float y)
     {

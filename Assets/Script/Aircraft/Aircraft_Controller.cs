@@ -22,7 +22,7 @@ public class Aircraft_Controller : MonoBehaviour
         set { pitchAngle = value; pitchAngle = Mathf.Clamp(value, -15, 15); }
     }// push down positive
     private float rowAngle = 0;
-    public float RowAngle
+    public float RollAngle
     {
         get { return rowAngle; }
         set { rowAngle = value; rowAngle = Mathf.Clamp(value, -5, 5); }
@@ -72,7 +72,7 @@ public class Aircraft_Controller : MonoBehaviour
 
             return AoA; }
     }
-    public float Row // anti-clock wise positive
+    public float Roll // anti-clock wise positive
     {
         get
         {
@@ -86,7 +86,7 @@ public class Aircraft_Controller : MonoBehaviour
             }
         }
     }
-    public float RowSpeed
+    public float RollSpeed
     {
         
         get { return rb.angularVelocity.z; }
@@ -173,24 +173,24 @@ public class Aircraft_Controller : MonoBehaviour
 
             if (Input.GetKey(KeyCode.D))
             {
-                RowAngle -= Time.deltaTime * 10;
+                RollAngle -= Time.deltaTime * 10;
             }
             else if (Input.GetKey(KeyCode.A))
             {
-                RowAngle += Time.deltaTime * 10;
+                RollAngle += Time.deltaTime * 10;
             }
             else
             {
-                if (RowAngle < 0.1f && RowAngle > -0.1f)
+                if (RollAngle < 0.1f && RollAngle > -0.1f)
                 {
-                    RowAngle = 0;
+                    RollAngle = 0;
                 }
                 else
                 {
-                    RowAngle -= Time.deltaTime * 20 * (RowAngle > 0 ? 1 : -1);
+                    RollAngle -= Time.deltaTime * 20 * (RollAngle > 0 ? 1 : -1);
                 }
             }
-            RowAngle = Mathf.Clamp(RowAngle, -5, 5);
+            RollAngle = Mathf.Clamp(RollAngle, -5, 5);
         }
 
 
@@ -200,8 +200,8 @@ public class Aircraft_Controller : MonoBehaviour
     private void FixedUpdate()
     {
         rb.angularDrag = 0.0001f * rb.velocity.sqrMagnitude;
-        Left_H_Tail.transform.localRotation = Quaternion.Euler(PitchAngle + RowAngle, 0, 0);
-        Right_H_Tail.transform.localRotation = Quaternion.Euler(PitchAngle - RowAngle, 0, 0);
+        Left_H_Tail.transform.localRotation = Quaternion.Euler(PitchAngle + RollAngle, 0, 0);
+        Right_H_Tail.transform.localRotation = Quaternion.Euler(PitchAngle - RollAngle, 0, 0);
         Left_V_Tail.transform.localRotation = Quaternion.Euler(0, YawAngle, 90);
         Right_V_Tail.transform.localRotation = Quaternion.Euler(0, YawAngle, 90);
         rb.AddForce(transform.forward * Thrust * 700000f);
