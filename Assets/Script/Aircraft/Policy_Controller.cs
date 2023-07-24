@@ -15,6 +15,7 @@ public class Policy_Controller : MonoBehaviour
     public Aircraft_Controller aircraft;
     public GameObject CV;
     public Target_Route route = new Target_Route();
+    public Recorder recorder;
 
     private Vector3 preAircraftVel = Vector3.zero;
 
@@ -51,7 +52,11 @@ public class Policy_Controller : MonoBehaviour
     {
         Vector3 approachDirection = Vector3.ProjectOnPlane(route.Destination - transform.position, route.direction);
         //Debug.Log(approachDirection.y);
-        ThrustKeepGliding(-3 + Mathf.Clamp(approachDirection.y / 10f, -5,5));
+        if (recorder)
+        {
+            recorder.y_ErrRecord.Add(-approachDirection.y);
+        }
+        ThrustKeepGliding(-3 + Mathf.Clamp(approachDirection.y / 10f, -10,5));
     }
     public void YawApproachRoute()
     {
@@ -66,6 +71,11 @@ public class Policy_Controller : MonoBehaviour
         else
         {
             distance = -Vector3.ProjectOnPlane(approachDirection, Vector3.up).magnitude;
+        }
+
+        if (recorder)
+        {
+            recorder.x_ErrRecord.Add(distance);
         }
 
 
