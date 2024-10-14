@@ -2,7 +2,7 @@
 
 ## Description
 
-This repository is for simulating and validating our control policy of landing an aircraft ona carrier vessel.
+This repository is for simulating and validating our control policy of landing an aircraft on a carrier vessel.
 
 ## Installing
 
